@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Statistika</title>
+<style>
+:root{--bg:#fdf0c8;--card:#fffaf0;--tx:#0b3a4a;--ac:#0f766e;--gold:#f5b82e;--sea:#0e3a5c;--bad:#c0392b;--ok:#1e8e4e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1f33;--card:#12304d;--tx:#f3e9c6;--ac:#14b8a6;--sea:#0a2a47}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Trebuchet MS",Verdana,sans-serif;min-height:100vh}
+#app{max-width:480px;margin:0 auto;padding:12px 14px 28px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.top b{background:var(--gold);color:#3b2a00;padding:6px 12px;border-radius:20px}
+.tg{border:2px solid var(--ac);background:transparent;color:var(--tx);border-radius:16px;padding:5px 10px;font:inherit;font-size:13px;cursor:pointer;margin-left:4px}
+.tg.off{opacity:.55;text-decoration:line-through}
+h1,h2,h3{margin:6px 0}h1{font-size:30px;color:var(--gold);text-align:center}
+.card{background:var(--card);border:2px dashed var(--ac);border-radius:16px;padding:14px;margin:10px 0}
+.sea{background:var(--sea);color:#f3e9c6;border-radius:18px;padding:16px 10px}
+.btn{display:block;width:100%;border:0;border-radius:14px;background:var(--ac);color:#fff;font:inherit;font-weight:bold;font-size:17px;padding:13px;margin:8px 0;cursor:pointer}
+.btn.g{background:var(--gold);color:#3b2a00}.btn.l{background:transparent;color:var(--tx);border:2px solid var(--ac)}
+.btn:active{transform:scale(.97)}
+.isl{display:flex;flex-direction:column;align-items:center;margin:10px 0;border:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.isl:nth-child(even){align-self:flex-end;margin-right:12%}.isl:nth-child(odd){align-self:flex-start;margin-left:12%}
+.isl .c{width:84px;height:62px;border-radius:50%;background:#2f9e57;display:flex;align-items:center;justify-content:center;font-size:30px;border:3px solid #e9d28a}
+.isl.lock .c{background:#6b7a86;filter:grayscale(1)}.isl.lock{cursor:not-allowed}
+.map{display:flex;flex-direction:column}
+.cap{width:64px;height:64px;flex:none}
+.say{display:flex;gap:10px;align-items:center}.say p{margin:0;background:var(--card);border:2px solid var(--gold);border-radius:14px;padding:8px 12px}
+.fm{background:var(--sea);color:#ffe9a0;border-radius:12px;padding:12px;text-align:center;font-size:18px;font-weight:bold;margin:10px 0}
+.opt{display:block;width:100%;text-align:left;border:2px solid var(--ac);background:var(--card);color:var(--tx);border-radius:12px;padding:12px;margin:8px 0;font:inherit;font-size:17px;cursor:pointer}
+.opt.ok{background:var(--ok);color:#fff;border-color:var(--ok)}.opt.no{background:var(--bad);color:#fff;border-color:var(--bad)}
+.hud{display:flex;justify-content:space-between;font-size:20px}
+.stars{font-size:46px;text-align:center;letter-spacing:6px}
+.st{margin:6px 0;padding:8px;border-radius:10px;background:var(--card);border-left:5px solid var(--gold)}
+.sm{font-size:13px;opacity:.85;text-align:center}
+.bounce{animation:b .5s}@keyframes b{50%{transform:translateY(-10px)}}
+.shake{animation:s .4s}@keyframes s{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.tg:disabled{opacity:.4;cursor:not-allowed}.tools{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}.tools .tg{margin:0}.opt.hd{opacity:.25;pointer-events:none;text-decoration:line-through}
+.cv{width:min(100%,calc((100vh - 200px)*.75));height:auto;margin:0 auto;border-radius:14px;touch-action:none;display:block;border:3px solid var(--gold)}.ctl{display:flex;gap:10px}.ctl .btn{font-size:26px;user-select:none;touch-action:none}
+.qh{display:flex;justify-content:space-between;align-items:center;background:var(--sea);color:#f3e9c6;border-radius:14px;padding:8px 14px;font-weight:bold;font-size:17px}
+.pb{height:10px;background:rgba(0,0,0,.2);border-radius:6px;margin:8px 0;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,#f5b82e,#ffdf7a);transition:width .4s}
+.scroll{background:linear-gradient(#f8e9bd,#ecd391);color:#3b2a12;border:3px solid #b8863a;border-radius:14px;padding:20px 16px 14px;margin:18px 0 12px;box-shadow:0 4px 0 #8a6224;position:relative;animation:in .4s;font-size:17px}
+.scroll p{margin:0}.scroll .tag{position:absolute;top:-13px;left:14px;background:#b8863a;color:#fff;font-size:13px;padding:2px 12px;border-radius:10px;font-weight:bold}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.chip{background:#0e3a5c;color:#ffe9a0;border-radius:10px;padding:6px 11px;font-weight:bold;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.pts{position:absolute;right:14px;top:-16px;font-size:24px;font-weight:bold;color:#1e8e4e;background:#fff;border-radius:12px;padding:0 10px;animation:up 1.2s forwards}@keyframes up{to{transform:translateY(-22px);opacity:0}}@keyframes in{from{opacity:0;transform:translateY(12px)}}
+.opt{display:flex;align-items:center;gap:12px;box-shadow:0 3px 0 rgba(0,0,0,.2);transition:transform .1s;animation:in .4s}.opt:hover{transform:translateY(-2px)}.opt .l{width:34px;height:34px;border-radius:50%;background:var(--gold);color:#3b2a00;display:flex;align-items:center;justify-content:center;flex:none}.opt span{flex:1}.opt.ok .l,.opt.no .l{background:#fff;color:#222}.opt.no{animation:s .4s}
+.hero{background:linear-gradient(#0b1f44,#1d6fa5);color:#f3e9c6;border-radius:18px;padding:22px 16px;text-align:center;margin:8px 0;overflow:hidden}.hero h1{margin:4px 0}.hero h2{margin:8px 0;color:var(--gold)}.hero p{margin:10px 0;font-size:17px}.hero .cap{width:110px;height:110px}.boat{font-size:76px;line-height:1.1}
+.float{animation:fl 3s ease-in-out infinite;display:inline-block}@keyframes fl{50%{transform:translateY(-8px) rotate(2deg)}}
+.fi{opacity:0;animation:fi .7s forwards}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.tw{animation:tw 1.6s infinite}@keyframes tw{50%{opacity:.3}}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.menu .btn{font-size:15px;padding:12px 4px;margin:0}
+#cf{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.stars .sp{display:inline-block;animation:pop .6s cubic-bezier(.2,1.6,.4,1) both}
+.champ{position:relative;text-align:center;background:radial-gradient(circle at 50% 30%,#3b2a00,#0b1f44 70%);color:#fff2c0;border-radius:20px;padding:26px 14px;overflow:hidden;border:3px solid #f5b82e;box-shadow:0 0 30px rgba(245,184,46,.5)}
+.champ>*{position:relative}.champ h1{font-size:34px;letter-spacing:2px;margin:6px 0;background:linear-gradient(#fff6c8,#f5b82e);-webkit-background-clip:text;background-clip:text;color:transparent}.champ h2{margin:4px 0;color:#fff}.champ p{margin:8px 0}
+.rays{position:absolute!important;left:50%;top:80px;width:520px;height:520px;margin:-260px 0 0 -260px;background:repeating-conic-gradient(rgba(245,184,46,.28) 0 10deg,transparent 10deg 20deg);border-radius:50%;animation:spin 14s linear infinite;-webkit-mask-image:radial-gradient(circle,#000 20%,transparent 70%);mask-image:radial-gradient(circle,#000 20%,transparent 70%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.trophy{font-size:110px;line-height:1;filter:drop-shadow(0 0 22px #f5b82e);animation:pop 1s cubic-bezier(.2,1.6,.4,1) both,glow 2s ease-in-out 1s infinite}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}}@keyframes glow{50%{transform:scale(1.08);filter:drop-shadow(0 0 40px #ffe27a)}}
+.crown{font-size:34px;margin-top:-6px}.rank{display:inline-block;background:linear-gradient(#ffe27a,#f5b82e);color:#3b2a00;font-weight:bold;padding:8px 18px;border-radius:24px;margin:8px 0;box-shadow:0 3px 0 #8a6224}
+.medals{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}.medal{background:rgba(255,255,255,.1);border:2px solid rgba(245,184,46,.6);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:2px}.medal span{font-size:28px}.score{font-size:18px;margin-top:6px}
+.tbw{height:12px;background:rgba(0,0,0,.2);border-radius:8px;overflow:hidden;margin:6px 0}#tb{height:100%;background:linear-gradient(90deg,#2ecc71,#f5b82e);transition:width .1s linear}
+.in{width:100%;padding:12px;border-radius:12px;border:2px solid var(--ac);font:inherit;font-size:18px;text-align:center;background:var(--card);color:var(--tx);margin:8px 0}
+</style></head><body><div id="app"></div>
+<script>
+/* ===== Audio (Web Audio API, tanpa berkas luar) ===== */
+let AC,MG,SG,tm=null,bar=0;
+function ac(){if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)();MG=AC.createGain();MG.gain.value=.1;MG.connect(AC.destination);SG=AC.createGain();SG.gain.value=.3;SG.connect(AC.destination)}if(AC.state==="suspended")AC.resume()}
+function tone(f,t,d,ty,dest,v){const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v||1,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.05)}
+const hz=n=>440*Math.pow(2,n/12);
+const MEL=[[0,3,7],[5,3,0],[-2,2,5],[3,2,-2],[0,3,7],[8,7,5],[7,5,3],[0,null,null]],BAS=[-24,-24,-26,-26,-24,-28,-29,-24];
+function measure(){if(!AC)return;const t=AC.currentTime+.05,i=bar%8;bar++;tone(hz(BAS[i]),t,.9,"triangle",MG,1.2);tone(hz(BAS[i]+12),t+.5,.4,"sine",MG,.5);tone(hz(BAS[i]+12),t+1,.4,"sine",MG,.5);
+MEL[i].forEach((n,k)=>{if(n!==null)tone(hz(n),t+k*.5,i===7?1.4:.45,"triangle",MG,.9)})}
+const CH=[{r:-24,c:[-12,-9,-5]},{r:-28,c:[-16,-12,-9]},{r:-21,c:[-9,-5,-2]},{r:-26,c:[-14,-10,-7]}],IM=[[[0,3,1.8],[2,7,1.8]],[[0,8,1.8],[2,5,1.8]],[[0,7,1.8],[2,3,.9],[3,5,.9]],[[0,2,1.8],[2,5,1.8]]],SM=[[7,null,7,10,12,null,10,7],[8,null,8,12,15,null,12,8],[7,null,7,10,15,null,10,7],[5,null,2,5,10,null,5,2]];
+let MT='intro',NB=null,NT=0;
+function noise(t,d,v,hp){if(!NB){NB=AC.createBuffer(1,AC.sampleRate*3,AC.sampleRate);const a=NB.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}const n=AC.createBufferSource(),g=AC.createGain(),f=AC.createBiquadFilter();n.buffer=NB;f.type='highpass';f.frequency.value=hp;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);n.connect(f);f.connect(g);g.connect(MG);n.start(t);n.stop(t+d)}
+function kick(t){const o=AC.createOscillator(),g=AC.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(1.2,t);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(MG);o.start(t);o.stop(t+.25)}
+const THo={
+intro:{d:3.6,f(t,i){const h=CH[i%4];h.c.forEach(n=>tone(hz(n),t,3.5,'sine',MG,.35));tone(hz(h.r),t,1.6,'triangle',MG,1.1);tone(hz(h.r),t+1.8,1.6,'triangle',MG,.9);[0,1,2,1,0,1,2,1].forEach((k,j)=>tone(hz(h.c[k]+12),t+j*.45,.7,'triangle',MG,.55));IM[i%4].forEach(([b,n,dd])=>tone(hz(n),t+b*.9,dd,'sine',MG,.9));noise(t,3,.05,600)}},
+map:{d:1.5,f(t,i){i%=8;tone(hz(BAS[i]),t,.9,'triangle',MG,1.2);tone(hz(BAS[i]+12),t+.5,.4,'sine',MG,.5);tone(hz(BAS[i]+12),t+1,.4,'sine',MG,.5);MEL[i].forEach((n,k)=>{if(n!==null)tone(hz(n),t+k*.5,i===7?1.4:.45,'triangle',MG,.9)})}},
+sail:{d:1.6,f(t,i){const h=CH[i%4],m=SM[i%4];for(let j=0;j<8;j++){const tt=t+j*.2;tone(hz(h.r+(j%2?12:0)),tt,.15,'square',MG,.32);if(m[j]!==null)tone(hz(m[j]),tt,.2,'square',MG,.3);noise(tt,.04,.05,7000)}[0,2].forEach(b=>kick(t+b*.4));[1,3].forEach(b=>noise(t+b*.4,.12,.18,1800))}},
+storm:{d:1.4,f(t,i){const B=[-24,-24,-12,-24,-24,-23,-12,-24],M=[12,15,18,15];for(let j=0;j<8;j++){tone(hz(B[j]),t+j*.175,.15,'sawtooth',MG,.45);noise(t+j*.175,.03,.06,7000)}[0,1,2,3].forEach(b=>{kick(t+b*.35);tone(hz(M[b]),t+b*.35,.3,'square',MG,.3)});[1,3].forEach(b=>noise(t+b*.35,.14,.22,1500))}},
+quiz:{d:2.4,f(t,i){const h=CH[i%4],o=(i%8>=4)?12:0;[0,1,2,1,2,1,0,1].forEach((k,j)=>tone(hz(h.c[k]+12+o),t+j*.3,.18,'sine',MG,.8));[0,2].forEach(b=>tone(hz(h.r),t+b*.6,.35,'triangle',MG,1.1));[0,1,2,3].forEach(b=>noise(t+b*.6,.02,.05,5000))}}};
+const CX={Am:{r:-24,c:[-12,-9,-5]},F:{r:-28,c:[-16,-12,-9]},C:{r:-21,c:[-9,-5,-2]},G:{r:-26,c:[-14,-10,-7]},Dm:{r:-19,c:[-7,-4,0]},E:{r:-29,c:[-17,-13,-10]}};
+const PS=['Am','F','C','G','Am','Dm','E','E'],PQ=['C','Am','F','G','C','Am','Dm','G'],PM=['Am','Am','G','G','Am','F','E','Am'],BP=[0,0,12,0,0,12,7,12];
+const SA=[[12,null,12,15,17,null,15,12],[15,null,12,8,12,null,15,17],[19,null,15,19,22,null,19,15],[17,null,14,17,14,null,10,14],[19,19,17,15,12,null,15,17],[17,null,17,15,12,null,8,12],[14,null,14,11,7,null,11,14],[14,null,11,14,19,null,null,null]];
+const QM=[[7,null,10,7,3,null,5,7],[12,null,10,7,10,null,12,10],[12,null,8,12,15,null,12,8],[10,null,7,10,14,null,10,7],[15,null,12,10,7,null,10,12],[12,null,15,12,7,null,10,12],[12,null,8,5,8,null,12,8],[14,null,10,14,17,null,14,10]];
+const TH={intro:THo.intro,storm:THo.storm,
+map:{d:1.5,f(t,i){THo.map.f(t,i);const h=CX[PM[i%8]];kick(t);[.5,1].forEach(b=>{noise(t+b,.06,.12,2000);h.c.forEach(n=>tone(hz(n+12),t+b,.3,'triangle',MG,.28))})}},
+sail:{d:1.6,f(t,i){const b=i%8,h=CX[PS[b]],m=SA[b];for(let j=0;j<8;j++){const tt=t+j*.2;tone(hz(h.r+BP[j]),tt,.16,'square',MG,.32);if(m[j]!==null){tone(hz(m[j]),tt,.2,'square',MG,.28);if(b>3)tone(hz(m[j]-12),tt,.2,'sawtooth',MG,.12)}noise(tt,.04,j%2?.03:.07,7000);if(j%2)tone(hz(h.c[j%3]+12),tt,.08,'triangle',MG,.2)}kick(t);kick(t+.8);if(b%2)kick(t+.5);[.4,1.2].forEach(q=>noise(t+q,.12,.2,1800));if(b===7)for(let j=0;j<4;j++)noise(t+1.2+j*.1,.08,.2,1800)}},
+quiz:{d:2.4,f(t,i){const b=i%8,h=CX[PQ[b]],m=QM[b];m.forEach((n,j)=>{if(n!==null){tone(hz(n),t+j*.3,.2,'sine',MG,.9);tone(hz(n+12),t+j*.3,.1,'triangle',MG,.25)}if(j%2)noise(t+j*.3,.03,.05,6000)});[0,1.2].forEach(k=>tone(hz(h.r),t+k,.4,'triangle',MG,1.1));[.6,1.8].forEach(k=>{tone(hz(h.r+7),t+k,.3,'triangle',MG,.8);noise(t+k,.08,.07,1800)})}}};
+const CZ={Dm:{r:-31,c:[-19,-16,-12]},Bb:{r:-23,c:[-11,-7,-4]},F:{r:-28,c:[-16,-12,-9]},C:{r:-33,c:[-21,-17,-14]},A:{r:-24,c:[-12,-8,-5]},Gm:{r:-26,c:[-14,-11,-7]}};
+const PI=['Dm','Bb','F','C','Dm','Bb','Gm','A'],PN=['Dm','F','C','Gm','Dm','Bb','C','A'];
+const HI=[[[0,5,3],[3,8,1]],[[0,8,2],[2,5,1],[3,1,1]],[[0,12,3],[3,10,1]],[[0,7,2],[2,10,2]],[[0,17,3],[3,15,1]],[[0,13,2],[2,12,1],[3,8,1]],[[0,10,2],[2,13,2]],[[0,16,2],[2,12,2]]];
+const HM=[[[0,5,2],[2,8,1],[3,7,1]],[[0,8,2],[2,12,2]],[[0,10,1],[1,7,1],[2,3,2]],[[0,5,2],[2,1,2]],[[0,12,2],[2,8,1],[3,5,1]],[[0,13,2],[2,12,1],[3,8,1]],[[0,10,2],[2,7,2]],[[0,12,3],[3,16,1]]];
+function glide(a,b,t,d,v){const o=AC.createOscillator(),g=AC.createGain();o.type='sawtooth';o.frequency.setValueAtTime(a,t);o.frequency.linearRampToValueAtTime(b,t+d);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+d*.3);g.gain.linearRampToValueAtTime(0,t+d);o.connect(g);g.connect(MG);o.start(t);o.stop(t+d+.05)}
+TH.intro={d:2.67,f(t,i){const b=i%8,h=CZ[PI[b]],B=.667;
+h.c.forEach(n=>{tone(hz(n),t,2.7,'triangle',MG,.3);tone(hz(n+12),t,2.7,'sine',MG,.2)});
+tone(hz(h.r),t,2.6,'sawtooth',MG,.16);tone(hz(h.r),t,2.6,'sine',MG,.9);
+HI[b].forEach(([k,n,dd])=>{tone(hz(n),t+k*B,dd*B,'triangle',MG,.8);tone(hz(n-12),t+k*B,dd*B,'sawtooth',MG,.18)});
+kick(t);kick(t+2*B);if(b%4===3)[0,.25,.5,.75].forEach(q=>kick(t+(3+q)*B));
+noise(t,2.6,.06,400);if(b%4===1){glide(150,105,t+1.1,.8,.1);glide(210,150,t+1.6,.7,.07)}}};
+TH.map={d:2.4,f(t,i){const b=i%8,h=CZ[PN[b]],B=.6;
+[0,1,2,1,0,1,2,1].forEach((k,j)=>tone(hz(h.c[k]+12),t+j*.3,.5,'triangle',MG,.5));
+tone(hz(h.r),t,1.1,'triangle',MG,1.1);tone(hz(h.r+7),t+1.2,1.1,'triangle',MG,.8);
+HM[b].forEach(([k,n,dd])=>tone(hz(n),t+k*B,dd*B,'sine',MG,.75));
+noise(t,2.3,.035,500);if(b%4===0){tone(hz(24),t+1.2,1.2,'sine',MG,.35);tone(hz(36.1),t+1.2,.8,'sine',MG,.12)}}};
+const PC=['Dm','Bb','Gm','A','Dm','F','C','A'],BP2=[0,0,12,0,0,12,0,7];
+const LC=[[12,null,12,10,8,null,10,12],[13,null,13,12,10,null,8,10],[10,null,13,12,10,null,8,5],[7,null,12,null,16,null,12,7],[17,null,15,12,17,null,15,12],[15,null,12,8,12,null,15,17],[19,null,15,10,15,null,19,22],[16,null,19,null,16,12,null,null]];
+function cel(f,t,d,v){const g=AC.createGain(),lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1600;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v*.5,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+d);lp.connect(g);g.connect(MG);[1,1.005].forEach(k=>{const o=AC.createOscillator();o.type='sawtooth';o.frequency.value=f*k;o.connect(lp);o.start(t);o.stop(t+d+.05)})}
+const cs=(e,full)=>({d:e*8,f(t,i){const b=i%8,h=CZ[PC[b]],m=LC[b];
+for(let j=0;j<8;j++){const tt=t+j*e;cel(hz(h.r+BP2[j]),tt,e*.95,.9);if(m[j]!==null)cel(hz(m[j]),tt,e*(m[j+1]===null&&j<7?1.9:.95),.55);
+if(full){noise(tt,.04,j%2?.07:.04,7000);if(j===2||j===6)h.c.forEach(n=>tone(hz(n),tt,e*.8,'sawtooth',MG,.12))}}
+kick(t);kick(t+4*e);
+if(full){if(b%2)kick(t+5*e);[2,6].forEach(q=>{noise(t+q*e,.14,.22,1800);tone(180,t+q*e,.1,'triangle',MG,.8)});if(b===0)noise(t,1.2,.18,3000);if(b===7)for(let j=0;j<4;j++)noise(t+(6+j*.5)*e,.08,.2,1800)}
+else{noise(t+4*e,.12,.1,1800);noise(t,3,.03,500)}}});
+TH.intro=cs(.2143,1);TH.map=cs(.4286,0);
+function music(){if(!AC)return;const T=TH[MT];if(NT<AC.currentTime)NT=AC.currentTime+.05;while(NT<AC.currentTime+.6){T.f(NT,bar++);NT+=T.d}}
+function musicOn(){ac();musicOff();bar=0;NT=AC.currentTime+.05;music();tm=setInterval(music,200)}
+function theme(n){if(MT===n)return;MT=n;if(tm&&s.mu)musicOn()}
+function musicOff(){clearInterval(tm);tm=null}
+function sfx(k){if(!s.sf)return;ac();const t=AC.currentTime,P=(f,d,ty,o)=>tone(f,t+o,d,ty,SG,.8);
+({click:()=>P(620,.08,"square",0),ok:()=>[523,659,784].forEach((f,i)=>P(f,.18,"triangle",i*.09)),bad:()=>{P(220,.25,"sawtooth",0);P(165,.35,"sawtooth",.15)},
+star:()=>[880,1109,1319].forEach((f,i)=>P(f,.25,"sine",i*.12)),win:()=>[523,659,784,1047,784,1047].forEach((f,i)=>P(f,.3,"triangle",i*.14)),
+lose:()=>[392,330,262,196].forEach((f,i)=>P(f,.35,"triangle",i*.2)),coin:()=>{P(988,.1,"square",0);P(1319,.18,"square",.07)},boom:()=>{P(110,.35,"sawtooth",0);P(55,.5,"square",.02)}})[k]()}
+
+/* ===== Pembuat soal ===== */
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a,sh=a=>a.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const F=n=>String(n).replace(".",","),L=a=>a.join(", "),sum=a=>a.reduce((p,c)=>p+c,0);
+const arr=(n,a,b)=>Array.from({length:n},()=>R(a,b)),U=(n,a,b)=>sh(Array.from({length:b-a+1},(_,i)=>a+i)).slice(0,n),srt=a=>[...a].sort((p,q)=>p-q);
+function mk(t,a,sol){const d=sh([-3,-2,-1,1,2,3]).map(k=>a+k).filter(x=>x>0).slice(0,3);return{t,a,sol,o:sh([a,...d])}}
+function meanQ(n,lo,hi,txt,from){let x=arr(n-1,lo,hi),s0=sum(x),l=Array.from({length:n},(_,i)=>from+i).find(v=>(s0+v)%n===0);x=sh([...x,l]);s0+=l;
+return mk(`${txt} ${L(x)}. Berapa rata-rata (mean)-nya?`,s0/n,`Jumlah = ${s0}. Banyak data = ${n}. Mean = ${s0} ÷ ${n} = ${s0/n}.`)}
+function modQ(lo,hi,txt,c1,ask){const m=R(lo,hi),o=U(3,lo,hi).filter(v=>v!==m).slice(0,2),x=sh([...Array(c1).fill(m),o[0],o[0],o[1]]);
+return ask?mk(`${txt} ${L(x)}. Modusnya muncul berapa kali?`,c1,`Data yang paling sering adalah ${m}, muncul ${c1} kali.`):mk(`${txt} ${L(x)}. Berapa modusnya?`,m,`${m} muncul ${c1} kali, paling sering dibanding data lain. Modus = ${m}.`)}
+function ranQ(n,lo,hi,txt){const x=arr(n,lo,hi),mx=Math.max(...x),mn=Math.min(...x);return mk(`${txt} ${L(x)}. Berapa jangkauannya?`,mx-mn,`Terbesar = ${mx}, terkecil = ${mn}. Jangkauan = ${mx} − ${mn} = ${mx-mn}.`)}
+const tf=(t,ok,sol)=>({t,a:ok?'Benar':'Salah',sol,o:sh(['Benar','Salah'])});
+const IS=[
+{n:"Mean",ic:"🌴",def:"Mean (rata-rata) adalah jumlah semua data dibagi banyaknya data.",f:"Mean = jumlah data ÷ banyak data",
+ ex:{q:"Nilai 5 siswa: 6, 8, 7, 9, 10. Berapa mean-nya?",st:["Jumlahkan semua data: 6 + 8 + 7 + 9 + 10 = 40","Hitung banyak data: ada 5 data","Bagi: 40 ÷ 5 = 8. Mean = 8"]},
+ g:[()=>meanQ(5,5,10,"Nilai ulangan 5 siswa:",5),()=>meanQ(4,37,41,"Ukuran sepatu 4 siswa:",36),()=>{const m=R(9,12),x=arr(4,m-2,m+2),k=5*m-sum(x);return mk(`Rata-rata 5 data adalah ${m}. Empat data di antaranya: ${L(x)}. Berapa data kelimanya?`,k,`Jumlah 5 data = ${m} × 5 = ${5*m}. Jumlah 4 data = ${sum(x)}. Data kelima = ${5*m} − ${sum(x)} = ${k}.`)},()=>meanQ(6,150,160,"Tinggi badan 6 siswa (cm):",150),()=>{const m=R(70,85),z=[60,61,62,63,64].find(v=>(4*m+v)%5===0),n=(4*m+z)/5;return mk(`Rata-rata nilai 4 siswa adalah ${m}. Seorang siswa baru bernilai ${z} bergabung. Berapa rata-rata nilai kelima siswa sekarang?`,n,`Jumlah awal = ${m} × 4 = ${4*m}. Ditambah ${z} menjadi ${4*m+z}. Mean baru = ${4*m+z} ÷ 5 = ${n}.`)},()=>{let x=arr(4,5,10),s0=sum(x),l=[5,6,7,8,9,10].find(v=>(s0+v)%5===0);x=sh([...x,l]);s0+=l;const ok=Math.random()<.5,cl=ok?s0/5:s0/5+(Math.random()<.5?1:-1);return tf(`Data: ${L(x)}. Benar atau salah: mean data tersebut adalah ${cl}?`,ok,`Jumlah = ${s0}, banyak data = 5, mean = ${s0/5}. Pernyataan ini ${ok?'benar':'salah'}.`)}]},
+{n:"Median",ic:"🏝️",def:"Median adalah nilai tengah data setelah data diurutkan dari yang terkecil. Jika banyak data genap, median adalah rata-rata dua data tengah.",f:"Urutkan data, lalu ambil nilai tengahnya",
+ ex:{q:"Data: 7, 3, 9, 5, 8. Berapa mediannya?",st:["Urutkan dari kecil ke besar: 3, 5, 7, 8, 9","Cari data tengah: dari 5 data, tengahnya data ke-3","Data ke-3 adalah 7. Median = 7"]},
+ g:[()=>{const x=U(5,3,20),s=srt(x);return mk(`Data: ${L(x)}. Berapa mediannya?`,s[2],`Urutkan: ${L(s)}. Data tengah (ke-3) = ${s[2]}.`)},
+  ()=>{const x=U(7,150,170),s=srt(x);return mk(`Tinggi badan 7 siswa (cm): ${L(x)}. Berapa mediannya?`,s[3],`Urutkan: ${L(s)}. Data tengah (ke-4) = ${s[3]}.`)},
+  ()=>{const x=U(6,2,20),s=srt(x),a=(s[2]+s[3])/2;return mk(`Data: ${L(x)}. Berapa mediannya?`,a,`Urutkan: ${L(s)}. Dua data tengah: ${s[2]} dan ${s[3]}. Median = (${s[2]} + ${s[3]}) ÷ 2 = ${F(a)}.`)},()=>{const x=U(9,10,60),s=srt(x);return mk(`Nilai 9 siswa: ${L(x)}. Berapa mediannya?`,s[4],`Urutkan: ${L(s)}. Data tengah (ke-5) = ${s[4]}.`)},()=>{const x=U(8,30,90),s=srt(x),a=(s[3]+s[4])/2;return mk(`Berat badan 8 siswa (kg): ${L(x)}. Berapa mediannya?`,a,`Urutkan: ${L(s)}. Dua data tengah: ${s[3]} dan ${s[4]}. Median = (${s[3]} + ${s[4]}) ÷ 2 = ${F(a)}.`)},()=>{const x=U(5,3,20),s=srt(x),ok=Math.random()<.5,cl=ok?s[2]:s[Math.random()<.5?1:3];return tf(`Data: ${L(x)}. Benar atau salah: median data tersebut adalah ${cl}?`,ok,`Urutkan: ${L(s)}. Median = ${s[2]}. Pernyataan ini ${ok?'benar':'salah'}.`)}]},
+{n:"Modus",ic:"🦜",def:"Modus adalah nilai yang paling sering muncul dalam data.",f:"Modus = data dengan frekuensi terbanyak",
+ ex:{q:"Ukuran sepatu: 38, 39, 38, 40, 38, 41. Berapa modusnya?",st:["Hitung kemunculan: 38 (3 kali), 39 (1), 40 (1), 41 (1)","Cari yang paling sering muncul: 38","Modus = 38"]},
+ g:[()=>modQ(36,42,"Ukuran sepatu:",3),()=>modQ(5,10,"Nilai ulangan:",3),()=>modQ(150,165,"Tinggi badan (cm):",4,1),()=>modQ(1,9,"Banyak buku yang dibaca tiap siswa:",3),()=>modQ(70,95,"Skor kuis:",3),()=>{const m=R(36,42),o=U(3,36,42).filter(v=>v!==m).slice(0,2),x=sh([m,m,m,o[0],o[0],o[1]]),ok=Math.random()<.5;return tf(`Ukuran sepatu: ${L(x)}. Benar atau salah: modus data tersebut adalah ${ok?m:o[0]}?`,ok,`${m} muncul 3 kali, paling sering. Modus = ${m}. Pernyataan ini ${ok?'benar':'salah'}.`)}]},
+{n:"Jangkauan",ic:"⚓",def:"Jangkauan (range) menunjukkan penyebaran data, yaitu selisih data terbesar dan data terkecil.",f:"Jangkauan = data terbesar − data terkecil",
+ ex:{q:"Tinggi badan (cm): 150, 162, 155, 170, 158. Berapa jangkauannya?",st:["Data terbesar = 170","Data terkecil = 150","Jangkauan = 170 − 150 = 20"]},
+ g:[()=>ranQ(5,148,175,"Tinggi badan (cm):"),()=>ranQ(6,40,100,"Nilai ujian:"),()=>{const mx=R(80,95),r=R(20,40);return mk(`Data terbesar = ${mx} dan jangkauan = ${r}. Berapa data terkecilnya?`,mx-r,`Jangkauan = terbesar − terkecil, sehingga terkecil = ${mx} − ${r} = ${mx-r}.`)},()=>ranQ(7,20,60,"Umur 7 pemain (tahun):"),()=>{const mn=R(40,60),r=R(25,45);return mk(`Data terkecil = ${mn} dan jangkauan = ${r}. Berapa data terbesarnya?`,mn+r,`Terbesar = terkecil + jangkauan = ${mn} + ${r} = ${mn+r}.`)},()=>{const x=arr(5,148,175),mx=Math.max(...x),mn=Math.min(...x),ok=Math.random()<.5,cl=ok?mx-mn:mx-mn+R(1,4)*(Math.random()<.5?1:-1);return tf(`Tinggi badan (cm): ${L(x)}. Benar atau salah: jangkauan data tersebut adalah ${cl}?`,ok,`Terbesar ${mx}, terkecil ${mn}. Jangkauan = ${mx-mn}. Pernyataan ini ${ok?'benar':'salah'}.`)}]}];
+
+/* ===== Kapten ===== */
+const cap=m=>{const e=m==="happy"?'<path d="M36 52q5-7 10 0M54 52q5-7 10 0" stroke="#222" stroke-width="3" fill="none"/>':m==="sad"?'<circle cx="64" cy="53" r="3.5" fill="#222"/><path d="M33 44l10 4M67 48l8-3" stroke="#222" stroke-width="2.5"/><path d="M62 62q0 6-2 8" stroke="#4aa3ff" stroke-width="3" fill="none"/>':'<circle cx="62" cy="52" r="3.5" fill="#222"/>';
+const mo=m==="happy"?'<path d="M40 68q10 12 20 0z" fill="#8b1a1a"/>':m==="sad"?'<path d="M40 76q10-9 20 0" stroke="#8b1a1a" stroke-width="3" fill="none"/>':'<path d="M42 72h16" stroke="#8b1a1a" stroke-width="3"/>';
+return`<svg viewBox="0 0 100 100" class="cap ${m==="happy"?"bounce":m==="sad"?"shake":""}" role="img" aria-label="Kapten bajak laut"><circle cx="50" cy="56" r="30" fill="#f2c39b"/><path d="M18 46Q50 0 82 46Q50 36 18 46Z" fill="#c0392b"/><circle cx="50" cy="22" r="4" fill="#fff"/><circle cx="38" cy="52" r="8" fill="#222"/><path d="M30 46l40-8" stroke="#222" stroke-width="2"/>${e}${mo}</svg>`};
+const say=(m,t)=>`<div class="say">${cap(m)}<p>${t}</p></div>`;
+
+/* ===== State dan tampilan ===== */
+let s={sc:"start",ws:0,nm:"",tl:{k:0,p:0,t:0},hid:[],hint:0,saved:0,sl:null,score:0,un:1,st:[0,0,0,0],mu:1,sf:1,cur:0,qs:[],qi:0,lv:3,sk:0,got:0,ans:null,step:0,back:"map",res:null,chest:0};
+const $=document.getElementById("app");
+const hdr=()=>`<div class="top"><b>⭐ ${s.score} poin</b><span><button class="tg ${s.mu?"":"off"}" onclick="tg('mu')">🎵 Musik</button><button class="tg ${s.sf?"":"off"}" onclick="tg('sf')">🔊 Efek</button></span></div>`;
+function render(){theme(({start:'intro',kuis:'quiz',juara:'champ'})[s.sc]||(s.sc==='sail'&&s.sl&&s.sl.go&&!s.sl.done&&!s.sl.fail?'sail':'map'));$.innerHTML=hdr()+V[s.sc]();if(s.pf){s.pf=0;party(s.sc==='juara')}if(s.sc==="sail")initSail();if(s.sc==="kuis"&&s.ans===null){if(!TQ)TQ=setInterval(tickQ,100)}else{clearInterval(TQ);TQ=null}}
+function tg(k){s[k]^=1;if(k==="mu")s.mu?musicOn():musicOff();else sfx("click");render()}
+function go(sc,b){sfx("click");if(b)s.back=b;s.sc=sc;render()}
+function begin(){go("map")}
+function openIs(i,b){if(i+1>s.un){sfx("bad");return}s.cur=i;s.step=0;go("materi",b)}
+function nextStep(){sfx("click");s.step++;render()}
+const qt=t=>{const m=t.match(/^(.*?): ((?:\d+(?:, )?)+)\. (.*)$/);return m?`<p>${m[1]}:</p><div class="chips">${m[2].split(", ").map(n=>`<span class="chip">${n}</span>`).join("")}</div><b>${m[3]}</b>`:`<b>${t}</b>`};
+function sail(){s.sl={t:0,hull:3,tools:{k:0,p:0,t:0},go:0,done:0,fail:0};go("sail")}
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),nm=()=>esc((s.nm||'').trim())||'Pelaut';
+function enter(){s.nm=(s.nm||'').trim().slice(0,14);ac();if(s.mu)musicOn();sfx('star');s.ws=1;render()}
+let TQ=null;function tickQ(){s.tt=Math.round((s.tt-.1)*10)/10;const b=document.getElementById('tb');if(b){b.style.width=Math.max(0,s.tt/s.tmax*100)+'%';if(s.tt<5)b.style.background='#c0392b'}if(s.tt<=5&&s.tt>0&&Number.isInteger(s.tt))sfx('click');if(s.tt<=0){s.to=1;pick(-1)}}
+function sgo(){s.sl.go=1;sfx("click");render()}
+function startQ(){s.tl=s.sl&&s.sl.done?{...s.sl.tools}:{k:0,p:0,t:0};s.hid=[];s.hint=0;s.saved=0;s.sl=null;s.tmax=Math.max(14,25-3*s.cur);s.tt=s.tmax;s.to=0;s.qs=sh(IS[s.cur].g).slice(0,5).map(f=>f());s.qi=0;s.lv=3;s.sk=0;s.got=0;s.ans=null;go("kuis")}
+const tbar=()=>`<div class="tools"><button class="tg" ${s.ans!==null||!s.tl.k||s.hid.length?"disabled":""} onclick="useK()">🧭 Kompas ×${s.tl.k}</button><button class="tg" ${s.ans!==null||!s.tl.t||s.hint?"disabled":""} onclick="useT()">🔭 Teropong ×${s.tl.t}</button><span class="tg">🛟 Pelampung ×${s.tl.p}</span></div>`;
+function useK(){if(s.ans!==null||!s.tl.k)return;const q=s.qs[s.qi];s.tl.k--;s.hid=sh(q.o.map((v,i)=>i).filter(i=>q.o[i]!==q.a)).slice(0,2);sfx("star");render()}
+function useT(){if(s.ans!==null||!s.tl.t)return;s.tl.t--;s.hint=1;sfx("star");render()}
+/* ===== Mini-game pelayaran ===== */
+let SID=0;const K={l:0,r:0};
+addEventListener("keydown",e=>{if(e.key==="ArrowLeft"||e.key==="a")K.l=1;if(e.key==="ArrowRight"||e.key==="d")K.r=1});
+addEventListener("keyup",e=>{if(e.key==="ArrowLeft"||e.key==="a")K.l=0;if(e.key==="ArrowRight"||e.key==="d")K.r=0});
+addEventListener('keydown',e=>{if(e.key===' '||e.key==='ArrowUp'){K.f=1;if(s.sc==='sail')e.preventDefault()}});
+addEventListener('keyup',e=>{if(e.key===' '||e.key==='ArrowUp')K.f=0});
+function initSail(){const o=s.sl,cv=document.getElementById('cv');SID++;if(!cv||!o||!o.go||o.done||o.fail)return;
+const id=SID,c=cv.getContext('2d'),W=360,H=480,T=30+4*s.cur,DF=1+.18*s.cur,SY=395,TL=['k','p','t'],TI={k:'🧭',p:'🛟',t:'🔭'},TN={k:'Kompas',p:'Pelampung',t:'Teropong'};
+let en=null,ed=0,bt=0,cb=0,ct=0,eb=[],x=180,tx=180,vx=0,last=performance.now(),sp=.3,hit=0,cd=0,shake=0,flash=0,lt=2,es=[],ps=[],bl=[],fx=[];
+const rain=Array.from({length:70},()=>({x:R(0,W),y:R(0,H),s:R(8,16)})),D=[44,150,210],U=[96,84,140],S=[22,44,66];
+const mixc=(a,b,k)=>a.map((v,i)=>Math.round(v+(b[i]-v)*k)),el=(X,Y,a,b,f)=>{c.fillStyle=f;c.beginPath();c.ellipse(X,Y,a,b,0,0,7);c.fill()};
+const P=(X,Y,a,b,l,col,r)=>ps.push({x:X,y:Y,vx:a,vy:b,l,m:l,col,r});
+cv.onpointerdown=cv.onpointermove=e=>{const r=cv.getBoundingClientRect();tx=(e.clientX-r.left)/r.width*W};
+const kill=(X,Y,p)=>{cb=ct>0?cb+1:1;ct=3;const bp=p+(cb>1?cb*2:0);s.score+=bp;sfx('boom');fx.push({x:X,y:Y,t:'+'+bp+(cb>1?' 🔥x'+cb:''),l:1})};
+const dmg=()=>{if(hit>0||bt>0)return;hit=1.2;o.hull--;shake=.4;sfx('bad');for(let k=0;k<10;k++)P(x+R(-10,10),SY+R(-30,20),R(-80,80),R(-40,60),.7,'#8b5a2b',3);if(o.hull<=0){o.fail=1;sfx('lose');render()}};
+const ship=(t,lean)=>{const sw=Math.sin(t*2.2)*2;c.save();c.translate(x,SY+Math.sin(t*3)*2);c.rotate(lean);
+el(5,6,17,44,'rgba(0,0,0,.25)');
+c.fillStyle='#5a3418';c.beginPath();c.moveTo(0,-46);c.bezierCurveTo(21,-26,19,22,11,40);c.lineTo(-11,40);c.bezierCurveTo(-19,22,-21,-26,0,-46);c.fill();
+c.fillStyle='#b07a45';c.beginPath();c.moveTo(0,-40);c.bezierCurveTo(15,-22,13,20,8,35);c.lineTo(-8,35);c.bezierCurveTo(-13,20,-15,-22,0,-40);c.fill();
+c.strokeStyle='rgba(60,30,10,.45)';c.lineWidth=1;for(let y=-30;y<34;y+=6){c.beginPath();c.moveTo(-12,y);c.lineTo(12,y);c.stroke()}
+c.fillStyle='#222';[-15,15].forEach(X=>[-6,8].forEach(y=>c.fillRect(X-3,y,6,4)));
+c.fillStyle='#7a4a24';c.fillRect(-9,22,18,12);c.fillStyle='#f5b82e';c.fillRect(-6,26,12,3);
+c.strokeStyle='#3b2210';c.lineWidth=3;c.beginPath();c.moveTo(0,-46);c.lineTo(0,-58);c.stroke();
+[-14,8].forEach(my=>{c.fillStyle='#f6efe0';c.beginPath();c.moveTo(-24,my-2);c.quadraticCurveTo(0,my+11+sw,24,my-2);c.lineTo(24,my+2);c.quadraticCurveTo(0,my+15+sw,-24,my+2);c.fill();c.strokeStyle='#c9b88c';c.lineWidth=1;c.stroke();el(0,my,3.5,3.5,'#3b2210')});
+c.fillStyle='#111';c.beginPath();c.moveTo(0,-14);c.lineTo(12+sw,-10);c.lineTo(0,-6);c.fill();el(5,-10,1.6,1.6,'#fff');c.restore()};
+const frame=now=>{if(id!==SID||s.sc!=='sail')return;const dt=Math.min(.05,(now-last)/1000);last=now;o.t+=dt;hit-=dt;cd-=dt;shake-=dt;flash-=dt;
+const ph=o.t/T,st=Math.max(0,Math.min(1,(ph-.55)/.15)),v=(140+o.t*3+st*40)*DF*(bt>0?1.6:1),px=x;bt-=dt;ct-=dt;
+if(K.l||K.r){x+=(K.r-K.l)*300*dt;tx=x}else x+=(tx-x)*Math.min(1,dt*9);
+if(st>0&&MT!=='storm')theme('storm');if(st>0){lt-=dt;if(lt<=0){lt=R(18,35)/10;flash=.3;sfx('boom')}}
+sp-=dt;if(sp<=0&&o.t<T-3){sp=(.5+Math.random()*.4)/DF;const r=Math.random(),X=R(30,W-30),k=TL[R(0,2)];
+if(r<.1&&o.t>5){const g=R(60,W-60);for(let xx=24;xx<W;xx+=40)if(Math.abs(xx-g)>46)es.push({ty:'r',x:xx,y:-40,r:19,pts:Array.from({length:9},()=>.8+Math.random()*.4)});fx.push({x:W/2,y:120,t:'🪨 Gerbang karang! Cari celahnya',l:1.5});sp+=.9}else if(r>.94)es.push({ty:'b',x:X,y:-30,r:15});else if(r>.88&&o.t>4)es.push({ty:'e',x:X,y:-30,r:15,vx:Math.random()<.5?40:-40,cd:1+Math.random()});else es.push(r<.28?{ty:'r',x:X,y:-40,r:R(17,25),pts:Array.from({length:9},()=>.8+Math.random()*.4)}:r<.4&&o.t>6?{ty:'w',x:X,y:-60,r:34}:r<.52&&o.t>3?{ty:'s',x:X,y:-30,r:14,vx:Math.random()<.5?55:-55}:r<.77?{ty:'t',k,x:X,y:-30,r:14}:{ty:'c',x:X,y:-30,r:10})}
+if((K.f||es.some(q=>(q.ty==='r'||q.ty==='s'||q.ty==='e')&&q.y>10&&q.y<SY-60&&Math.abs(q.x-x)<q.r+14)||(en&&en.y>40&&Math.abs(en.x-x)<34))&&cd<=0){cd=.55;sfx('boom');bl.push({x:x-8,y:SY-44},{x:x+8,y:SY-44});for(let k=0;k<6;k++)P(x+R(-8,8),SY-48,R(-25,25),R(-60,-20),.5,'#ddd',4);shake=Math.max(shake,.1);P(x-8,SY-50,0,-40,.15,'#ffd34d',7);P(x+8,SY-50,0,-40,.15,'#ffd34d',7)}
+c.save();if(shake>0)c.translate((Math.random()-.5)*10*shake,(Math.random()-.5)*10*shake);
+const col=ph<.35?mixc(D,U,ph/.35):mixc(U,S,Math.min(1,(ph-.35)/.3));c.fillStyle='rgb('+col+')';c.fillRect(-10,-10,W+20,H+20);
+c.lineWidth=2;for(let L=0;L<2;L++){c.strokeStyle='rgba(255,'+(L?255:230)+','+(L?255:200)+','+(.16+L*.1)+')';for(let i=0;i<8;i++){const yy=((i*70+o.t*v*(.45+L*.4))%(H+70))-35;c.beginPath();for(let xx=-10;xx<=W+10;xx+=10)c.lineTo(xx,yy+Math.sin(xx/(22+L*8)+i*2+o.t*2)*(4+st*6));c.stroke()}}
+if(o.t>T-4.5){const iy=-70+(o.t-(T-4.5))/4.5*330;el(W/2,iy,150,62,'rgba(255,255,255,.5)');el(W/2,iy,132,52,'#e8d28a');el(W/2,iy,96,36,'#2f9e57');c.font='48px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('🌴',W/2-30,iy);c.fillText('🏴‍☠️',W/2+34,iy-6)}
+P(x-7,SY+36,-8,v*.55,.7,'#fff',3);P(x+7,SY+36,8,v*.55,.7,'#fff',3);if(Math.random()<.5)P(x+R(-6,6),SY-44,R(-30,30),v*.2,.3,'#dff',2);
+for(let i=es.length-1;i>=0;i--){const q=es[i];q.y+=(q.ty==='w'?v*.9:v)*dt;if(bt>0&&(q.ty==='c'||q.ty==='t')){q.x+=(x-q.x)*dt*5;q.y+=(SY-q.y)*dt*2}if(q.vx){q.x+=q.vx*dt;if(q.x<24||q.x>W-24)q.vx*=-1}
+if(q.ty==='r'){c.strokeStyle='rgba(255,255,255,'+(.5+Math.sin(o.t*4+q.x)*.2)+')';c.lineWidth=4;c.beginPath();c.arc(q.x,q.y,q.r+6,0,7);c.stroke();c.fillStyle='#6d7378';c.beginPath();q.pts.forEach((m,j)=>{const a=j/9*6.283;c.lineTo(q.x+Math.cos(a)*q.r*m,q.y+Math.sin(a)*q.r*m)});c.closePath();c.fill();el(q.x-5,q.y-5,q.r*.45,q.r*.35,'#9aa1a6')}
+else if(q.ty==='w'){el(q.x,q.y,q.r,q.r,'rgba(10,30,60,.55)');c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=2;for(let k=0;k<4;k++){c.beginPath();for(let rr=3;rr<=q.r;rr+=2){const a=o.t*4+rr*.2+k*1.571;c.lineTo(q.x+Math.cos(a)*rr,q.y+Math.sin(a)*rr)}c.stroke()}const dx=q.x-x,dy=q.y-SY,d=Math.hypot(dx,dy);if(d<130&&d>1)x+=dx/d*90*(1-d/130)*dt}
+else if(q.ty==='s'){c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=2;c.beginPath();c.moveTo(q.x-14,q.y-22);c.lineTo(q.x,q.y-4);c.lineTo(q.x+14,q.y-22);c.stroke();c.fillStyle='#4b5560';c.beginPath();c.moveTo(q.x,q.y-16);c.lineTo(q.x-7,q.y+6);c.lineTo(q.x+7,q.y+6);c.fill()}
+else if(q.ty==='e'){q.cd-=dt;if(q.cd<=0&&q.y>20&&q.y<SY-140){q.cd=2.2/DF;eb.push({x:q.x,y:q.y+14,vx:(x-q.x)*.3,vy:230})}el(q.x,q.y+4,10,18,'#4a3a2a');c.fillStyle='#8b1a1a';c.beginPath();c.moveTo(q.x,q.y-14);c.lineTo(q.x+12,q.y+4);c.lineTo(q.x-12,q.y+4);c.fill();el(q.x,q.y+2,3,3,'#222')}
+else if(q.ty==='t'){const g=.35+Math.sin(o.t*5)*.15;el(q.x,q.y,24,24,'rgba(255,230,120,'+g+')');el(q.x,q.y,16,16,'#fff7d6');c.font='22px serif';c.textAlign='center';c.textBaseline='middle';c.fillText(TI[q.k],q.x,q.y+1)}
+else if(q.ty==='b'){el(q.x,q.y,26,26,'rgba(255,120,40,'+(.35+Math.sin(o.t*8)*.2)+')');el(q.x,q.y,17,17,'#fff2c0');c.font='24px serif';c.textAlign='center';c.textBaseline='middle';c.fillText('⚡',q.x,q.y+1)}
+else{el(q.x,q.y,10*Math.abs(Math.cos(o.t*5+q.x))+1,10,'#f5b82e')}
+const dd=Math.hypot(q.x-x,q.y-SY),dm=Math.hypot(q.x-x,q.y-SY+28),w=q.ty==='w';
+if(dd<q.r+(w?-6:16)||dm<q.r+(w?-10:12)){es.splice(i,1);
+if(q.ty==='b'){bt=5;sfx('win');fx.push({x:q.x,y:q.y,t:'⚡ Angin Kencang! Kebal 5 detik',l:1.6})}else if(q.ty==='t'){o.tools[q.k]++;sfx('star');fx.push({x:q.x,y:q.y,t:'+'+TI[q.k]+' '+TN[q.k],l:1.3});for(let k=0;k<8;k++)P(q.x,q.y,R(-60,60),R(-60,60),.5,'#ffe27a',3)}
+else if(q.ty==='c'){s.score+=5;sfx('coin');fx.push({x:q.x,y:q.y,t:'+5',l:.8})}
+else if(bt>0){s.score+=3;shake=.15;sfx('boom');for(let k=0;k<8;k++)P(q.x,q.y,R(-90,90),R(-90,90),.5,'#ff9a2e',4)}else if(hit<=0){hit=1.2;o.hull--;shake=.4;sfx('bad');for(let k=0;k<10;k++)P(x+R(-10,10),SY+R(-30,20),R(-80,80),R(-40,60),.7,'#8b5a2b',3);if(o.hull<=0){o.fail=1;sfx('lose');render();return}}}
+else if(q.y>H+60)es.splice(i,1)}
+x=Math.max(24,Math.min(W-24,x));vx+=((x-px)/dt-vx)*.15;
+bl=bl.filter(b=>{b.y-=460*dt;let al=b.y>-10;for(let j=0;j<es.length&&al;j++){const q=es[j];if((q.ty==='r'||q.ty==='s'||q.ty==='e')&&Math.hypot(q.x-b.x,q.y-b.y)<q.r+6){es.splice(j,1);al=false;kill(q.x,q.y,q.ty==='e'?8:3);for(let k=0;k<14;k++)P(q.x,q.y,R(-90,90),R(-90,90),.6,k%2?'#ff9a2e':'#999',4)}}
+if(al){el(b.x,b.y,4,4,'#111');el(b.x-1,b.y-1,1.5,1.5,'#777')}return al});
+if(!en&&ed<(s.cur>1?3:2)&&o.t>T*(.2+.22*ed)&&o.t<T-9){en={x:W/2,y:-60,hp:3,cd:1.5};fx.push({x:W/2,y:150,t:'⚠️ Kapal musuh! Tembak 3x!',l:2.2});sfx('bad')}
+if(en){en.y+=(90-en.y)*Math.min(1,dt*1.5);en.x+=Math.sign(x-en.x)*Math.min(Math.abs(x-en.x),60*DF*dt);en.cd-=dt;
+if(en.cd<=0&&en.y>60){en.cd=1.7/DF;const tt=(SY-en.y)/260;eb.push({x:en.x,y:en.y+30,vx:(x-en.x)/tt*.7,vy:260});sfx('boom');for(let k=0;k<5;k++)P(en.x,en.y+34,R(-20,20),R(20,60),.4,'#ddd',4)}
+bl=bl.filter(b=>{if(en&&Math.hypot(b.x-en.x,b.y-en.y)<32){en.hp--;sfx('boom');for(let k=0;k<10;k++)P(b.x,b.y,R(-80,80),R(-80,80),.5,'#ff9a2e',4);if(en.hp<=0){s.score+=20;fx.push({x:en.x,y:en.y,t:'Kapal musuh karam! +20',l:1.6});for(let k=0;k<26;k++)P(en.x+R(-20,20),en.y+R(-30,30),R(-120,120),R(-120,120),.9,k%2?'#ff9a2e':'#444',5);es.push({ty:'t',k:TL[R(0,2)],x:en.x,y:en.y,r:14});en=null;ed++}return false}return true});
+if(en){c.save();c.translate(en.x,en.y);c.rotate(Math.PI);c.scale(.85,.85);el(5,6,17,44,'rgba(0,0,0,.25)');c.fillStyle='#1d1d1d';c.beginPath();c.moveTo(0,-46);c.bezierCurveTo(21,-26,19,22,11,40);c.lineTo(-11,40);c.bezierCurveTo(-19,22,-21,-26,0,-46);c.fill();c.fillStyle='#4a3a2a';c.beginPath();c.moveTo(0,-40);c.bezierCurveTo(15,-22,13,20,8,35);c.lineTo(-8,35);c.bezierCurveTo(-13,20,-15,-22,0,-40);c.fill();[-14,8].forEach(my=>{c.fillStyle='#8b1a1a';c.beginPath();c.moveTo(-24,my-2);c.quadraticCurveTo(0,my+12,24,my-2);c.lineTo(24,my+2);c.quadraticCurveTo(0,my+16,-24,my+2);c.fill();el(0,my,3.5,3.5,'#222')});c.restore();for(let k=0;k<3;k++)el(en.x-14+k*14,en.y-44,5,5,k<en.hp?'#ff4d4d':'#555')}
+if(en&&o.t>T-5)en=null}
+eb=eb.filter(b=>{b.x+=b.vx*dt;b.y+=b.vy*dt;el(b.x,b.y,5,5,'#222');el(b.x-1,b.y-1,2,2,'#f55');if(Math.hypot(b.x-x,b.y-SY)<20||Math.hypot(b.x-x,b.y-SY+28)<16){dmg();return false}return b.y<H+20&&b.x>-20&&b.x<W+20});if(o.fail)return;
+if(bt>0){el(x,SY,30,52,'rgba(255,190,60,'+(.25+Math.sin(o.t*20)*.1)+')');for(let k=0;k<3;k++)P(x+R(-8,8),SY+40,R(-15,15),v*.8,.4,'#ff9a2e',4)}
+if(hit<=0||Math.floor(o.t*12)%2)ship(o.t,Math.max(-.25,Math.min(.25,vx/900)));
+ps=ps.filter(p=>{p.l-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;c.globalAlpha=Math.max(0,p.l/p.m);el(p.x,p.y,p.r*(1+(1-p.l/p.m)*.6),p.r*(1+(1-p.l/p.m)*.6),p.col);return p.l>0});c.globalAlpha=1;
+if(ph>.2&&ph<.6){c.fillStyle='rgba(255,120,40,'+.18*Math.sin((ph-.2)/.4*3.14)+')';c.fillRect(-10,-10,W+20,H+20)}
+if(st>0){c.fillStyle='rgba(5,15,30,'+.4*st+')';c.fillRect(-10,-10,W+20,H+20);c.strokeStyle='rgba(200,220,255,.5)';c.lineWidth=1;rain.forEach(d=>{d.y+=700*dt;d.x-=150*dt;if(d.y>H){d.y=-20;d.x=R(0,W+100)}c.beginPath();c.moveTo(d.x,d.y);c.lineTo(d.x+d.s*.25,d.y-d.s);c.stroke()})}
+if(flash>0){c.fillStyle='rgba(255,255,255,'+Math.min(.7,flash*2.2)+')';c.fillRect(-10,-10,W+20,H+20)}
+if(hit>0){c.fillStyle='rgba(255,0,0,'+.25*Math.min(1,hit)+')';c.fillRect(-10,-10,W+20,H+20)}
+c.restore();
+c.textAlign='center';c.textBaseline='middle';fx=fx.filter(f=>{f.l-=dt;f.y-=30*dt;c.globalAlpha=Math.min(1,f.l);c.font='bold 15px sans-serif';c.lineWidth=3;c.strokeStyle='#102';c.strokeText(f.t,f.x,f.y);c.fillStyle='#fff';c.fillText(f.t,f.x,f.y);return f.l>0});c.globalAlpha=1;
+c.font='20px serif';c.textAlign='left';c.fillText('❤️'.repeat(o.hull)+'🖤'.repeat(3-o.hull),10,22);c.textAlign='right';c.fillText('🧭'+o.tools.k+' 🛟'+o.tools.p+' 🔭'+o.tools.t,W-10,22);
+c.textAlign='center';c.font='bold 13px sans-serif';c.lineWidth=3;c.strokeStyle='#102';const lb=ph<.35?'☀️ Siang cerah':ph<.65?'🌅 Senja tiba':'⛈️ Badai!';c.strokeText(lb,W/2,50);c.fillStyle='#fff';c.fillText(lb,W/2,50);
+c.fillStyle='rgba(0,0,0,.4)';c.fillRect(10,H-14,W-20,8);c.fillStyle='#f5b82e';c.fillRect(10,H-14,(W-20)*Math.min(1,ph),8);c.font='16px serif';c.fillText('⛵',10+(W-20)*Math.min(1,ph),H-24);c.fillText('🏝️',W-14,H-24);
+if(o.t>=T){o.done=1;sfx('win');render();return}
+requestAnimationFrame(frame)};requestAnimationFrame(frame)}
+function initSailOld(){const o=s.sl,cv=document.getElementById("cv");SID++;if(!cv||!o||!o.go||o.done||o.fail)return;
+const id=SID,c=cv.getContext("2d"),W=360,H=480,T=28,SY=400,TL=["k","p","t"],TI={k:"🧭",p:"🛟",t:"🔭"};let x=180,tx=180,last=performance.now(),sp=.3,hit=0,es=[];
+cv.onpointerdown=cv.onpointermove=e=>{const r=cv.getBoundingClientRect();tx=(e.clientX-r.left)/r.width*W};
+const frame=now=>{if(id!==SID||s.sc!=="sail")return;const dt=Math.min(.05,(now-last)/1000);last=now;o.t+=dt;hit-=dt;const v=150+o.t*4;
+if(K.l||K.r){x+=(K.r-K.l)*280*dt;tx=x}else x+=(tx-x)*Math.min(1,dt*10);x=Math.max(24,Math.min(W-24,x));
+sp-=dt;if(sp<=0&&o.t<T-3){sp=.65+Math.random()*.45;const r=Math.random(),X=R(28,W-28),k=TL[R(0,2)];es.push(r<.55?{e:["🪨","🌀","🦈"][R(0,2)],x:X,y:-30,o:1}:r<.8?{e:TI[k],k,x:X,y:-30,t:1}:{e:"🪙",x:X,y:-30})}
+c.fillStyle="#1d6fa5";c.fillRect(0,0,W,H);c.strokeStyle="rgba(255,255,255,.25)";c.lineWidth=2;
+for(let i=0;i<9;i++){const yy=((i*60+o.t*v*.6)%(H+60))-30;c.beginPath();for(let xx=0;xx<=W;xx+=12)c.lineTo(xx,yy+Math.sin(xx/25+i)*5);c.stroke()}
+c.textAlign="center";c.textBaseline="middle";
+if(o.t>T-4){c.font="64px serif";c.fillText("🏝️",W/2,-30+(o.t-(T-4))/4*360)}
+for(let i=es.length-1;i>=0;i--){const q=es[i];q.y+=v*dt;c.font="32px serif";c.fillText(q.e,q.x,q.y);
+if(Math.hypot(q.x-x,q.y-SY)<30){es.splice(i,1);
+if(q.o){if(hit<=0){hit=1;o.hull--;sfx("bad");if(o.hull<=0){o.fail=1;sfx("lose");render();return}}}
+else if(q.t){o.tools[q.k]++;sfx("star")}else{s.score+=5;sfx("coin")}}
+else if(q.y>H+30)es.splice(i,1)}
+if(hit<=0||Math.floor(o.t*10)%2){c.font="44px serif";c.fillText("⛵",x,SY)}
+c.font="20px serif";c.textAlign="left";c.fillText("❤️".repeat(o.hull)+"🖤".repeat(3-o.hull),10,24);c.textAlign="right";c.fillText(`🧭${o.tools.k} 🛟${o.tools.p} 🔭${o.tools.t}`,W-10,24);
+c.fillStyle="rgba(0,0,0,.35)";c.fillRect(10,H-14,W-20,8);c.fillStyle="#f5b82e";c.fillRect(10,H-14,(W-20)*Math.min(1,o.t/T),8);
+if(o.t>=T){o.done=1;sfx("win");render();return}
+requestAnimationFrame(frame)};requestAnimationFrame(frame)}
+function pick(k){if(s.ans!==null||s.hid.includes(k))return;const q=s.qs[s.qi];s.ans=k;if(q.o[k]===q.a){const p=10+5*Math.min(s.sk,2)+(s.tt>s.tmax/2?5:0);s.lp=p;s.sk++;s.got+=p;s.score+=p;sfx("ok")}else{s.sk=0;if(s.tl.p>0){s.tl.p--;s.saved=1}else s.lv--;sfx("bad")}render()}
+function nextQ(){if(s.lv===0){s.res={win:0,stars:0,bonus:0};sfx("lose");s.sc="hasil"}else if(s.qi===4){const st=s.lv,b=20*st;s.score+=b;s.st[s.cur]=Math.max(s.st[s.cur],st);s.un=Math.min(4,Math.max(s.un,s.cur+2));s.res={win:1,stars:st,bonus:b};s.pf=1;sfx("win");setTimeout(()=>sfx("star"),900);s.sc="hasil"}else{sfx("click");s.qi++;s.ans=null;s.hid=[];s.hint=0;s.saved=0;s.tt=s.tmax;s.to=0}render()}
+const hearts=n=>"❤️".repeat(n)+"🖤".repeat(3-n);
+const V={
+start:()=>s.ws?`<div class="hero"><div class="float">${cap('happy')}</div><h2 class="fi" style="animation-delay:.2s">Ahoy, Kapten ${nm()}! ⚓</h2><p class="fi" style="animation-delay:.8s">Selamat datang di <b>Petualangan Statistika</b>. Senang sekali kamu ikut berlayar bersamaku!</p><p class="fi" style="animation-delay:1.5s">Misimu: menaklukkan 4 pulau, menguasai Mean, Median, Modus, dan Jangkauan, lalu membuka Peti Harta! 🏆</p></div><div class="menu fi" style="animation-delay:1.6s"><button class="btn" onclick="go('pusat')">📖 Belajar</button><button class="btn" onclick="go('map')">🌊 Berlayar</button><button class="btn" onclick="openIs(s.un-1,'map')">🎯 Kuis</button></div><button class="btn g fi" style="animation-delay:2s" onclick="begin()">⛵ Mulai Berlayar</button>`:`<div class="hero"><div class="tw">✨ ⭐ 🌙 ⭐ ✨</div><div class="boat float">⛵</div><h1>Petualangan Statistika</h1><p>Game edukasi bajak laut: belajar mean, median, modus, dan jangkauan.</p></div><div class="card"><b>Selamat datang, calon kapten! 👋</b><br>Siapa namamu?<input id="nm" class="in" maxlength="14" placeholder="Tulis namamu di sini" value="${esc(s.nm)}" oninput="s.nm=this.value" onkeydown="if(event.key==='Enter')enter()"></div><button class="btn g" onclick="enter()">⚓ Naik ke Kapal</button><p class="sm">Nyalakan suara untuk pengalaman terbaik 🎵</p>`,
+startOld:()=>`<h1>⚓ Petualangan Statistika</h1><div class="sea">${say("happy","Ayo, ikut aku mencari harta karun statistika!")}</div>
+<div class="card"><b>Cara bermain</b><br>Berlayarlah antar pulau. Baca materi, seberangi lautan sambil mengumpulkan alat, lalu jawab 5 soal dengan 3 nyawa. Raih 1 sampai 3 bintang untuk membuka pulau berikutnya.</div>
+<button class="btn g" onclick="begin()">⛵ Mulai Berlayar</button><p class="sm">Gunakan tombol Musik dan Efek di atas untuk menyalakan atau mematikan suara.</p>`,
+map:()=>`<div class="sea"><h2>Peta Pulau</h2><p class="sm">Ahoy, Kapten ${nm()}! Pilih pulau yang terbuka.</p><div class="map">${IS.map((c,i)=>`<button class="isl ${i+1>s.un?"lock":""}" onclick="openIs(${i},'map')"><div class="c">${i+1>s.un?"🔒":c.ic}</div><b>${i+1}. ${c.n}</b><span>${"⭐".repeat(s.st[i])+"☆".repeat(3-s.st[i])}</span></button>`).join("")}
+<button class="isl ${s.st.every(x=>x>0)?"":"lock"}" onclick="chest()"><div class="c" style="background:#c98a1a">${s.st.every(x=>x>0)?"🏆":"🔒"}</div><b>Peti Harta</b></button></div></div>
+${s.chest?`<div class="card">${say("happy","Hebat, Kapten "+nm()+"! Semua pulau berhasil kamu taklukkan dengan "+s.score+" poin!")}</div>`:""}
+<button class="btn l" onclick="go('pusat','map')">📖 Pusat Materi</button><button class="btn l" onclick="s.ws=1;go('start')">🏠 Menu Awal</button>`,
+pusat:()=>`<h2>📖 Pusat Materi</h2><p class="sm">Baca ulang definisi, rumus, dan contoh kapan saja.</p>${IS.map((c,i)=>`<button class="btn ${i+1>s.un?"l":""}" onclick="openIs(${i},'pusat')">${c.ic} ${c.n}${i+1>s.un?" 🔒":""}</button>`).join("")}<button class="btn l" onclick="go('map')">⬅ Kembali ke peta</button><button class="btn l" onclick="s.ws=1;go('start')">🏠 Menu Awal</button>`,
+materi:()=>{const c=IS[s.cur];return`<h2>${c.ic} Pulau ${s.cur+1}: ${c.n}</h2><div class="card">${c.def}</div><div class="fm">${c.f}</div>
+<div class="card"><b>Contoh soal</b><br>${c.ex.q}${c.ex.st.slice(0,s.step).map((t,i)=>`<div class="st"><b>Langkah ${i+1}.</b> ${t}</div>`).join("")}</div>
+${s.step<3?`<button class="btn g" onclick="nextStep()">Langkah ${s.step+1} ➜</button>`:`<button class="btn" onclick="sail()">⛵ Berlayar ke Kuis</button>`}
+<button class="btn l" onclick="go('${s.back}')">⬅ Kembali</button>`},
+juara:()=>{const ts=s.st.reduce((a,b)=>a+b,0),rk=ts>=12?['Kapten Legendaris','👑']:ts>=9?['Kapten Pemberani','⚔️']:['Pelaut Tangguh','⚓'];
+return`<div class="champ"><div class="rays"></div><div class="trophy">🏆</div><div class="crown fi" style="animation-delay:.5s">${rk[1]}</div><h1 class="fi" style="animation-delay:.8s">SANG JUARA!</h1><h2 class="fi" style="animation-delay:1.2s">Kapten ${nm()}</h2><p class="fi" style="animation-delay:1.6s">Semua pulau berhasil ditaklukkan dan Peti Harta Statistika terbuka!</p><div class="rank fi" style="animation-delay:2s">${rk[1]} ${rk[0]}</div>
+<div class="medals fi" style="animation-delay:2.4s">${IS.map((c,i)=>`<div class="medal"><span>${c.ic}</span><b>${c.n}</b><small>${'⭐'.repeat(s.st[i])+'☆'.repeat(3-s.st[i])}</small></div>`).join('')}</div><div class="score fi" style="animation-delay:2.8s">Total poin <b>${s.score}</b> · Bintang <b>${ts}/12</b></div></div>
+<button class="btn g fi" style="animation-delay:3.2s" onclick="sfx('win');party(1)">🎆 Rayakan lagi</button><button class="btn l" onclick="go('map')">🗺 Kembali ke peta</button><button class="btn l" onclick="again()">🔁 Main dari awal</button>`},
+sail:()=>{const o=s.sl,T=o.tools;
+if(o.fail)return`<h2 style="text-align:center">🌊 Kapal tenggelam</h2>${say("sad","Kapalmu rusak diterjang rintangan. Coba lagi!")}<button class="btn g" onclick="sail()">🔁 Coba berlayar lagi</button><button class="btn l" onclick="startQ()">Lanjut ke kuis tanpa alat</button>`;
+if(o.done)return`<h2 style="text-align:center">🏝️ Pulau ${IS[s.cur].n} tercapai!</h2><div class="card"><b>Alat yang kamu bawa:</b><br>🧭 Kompas ×${T.k}<br>🛟 Pelampung ×${T.p}<br>🔭 Teropong ×${T.t}</div>${say("happy","Alat siap dipakai di kuis!")}<button class="btn g" onclick="startQ()">🎯 Mulai Kuis</button>`;
+if(!o.go)return`<h2>🌊 Seberangi Lautan</h2><div class="card">Geser kapal ke kiri dan kanan (sentuh atau geser layar, tombol ◀ ▶, atau tombol panah) selama sekitar 28 detik. Hindari 🪨 🌀 🦈: tiga tabrakan membuat kapal tenggelam. Meriam menembak otomatis saat ada sasaran tepat di depan kapal, atau tekan 💥 (spasi) untuk menembak sendiri. Tembak batu karang, hiu, perahu penyerang, dan kapal musuh; rangkai tembakan beruntun untuk kombo poin! Awas, pusaran menarik kapalmu, badai datang di akhir, dan kapal bajak laut musuh akan menembakimu: tembak 3 kali untuk menenggelamkannya! Semakin jauh pulaunya, semakin cepat dan panjang pelayarannya. Di kuis, tiap soal punya batas waktu. Ambil ⚡ untuk melaju kencang dan kebal selama 5 detik. Ada juga gerbang karang: cari celahnya!<br><br><b>Kumpulkan alat untuk kuis:</b><div class="st">🧭 Kompas: hilangkan 2 jawaban salah</div><div class="st">🛟 Pelampung: satu jawaban salah tidak mengurangi nyawa</div><div class="st">🔭 Teropong: tampilkan petunjuk rumus</div><div class="st">🪙 Koin: +5 poin</div></div><button class="btn g" onclick="sgo()">⛵ Berlayar!</button><button class="btn l" onclick="go('materi')">⬅ Kembali ke materi</button>`;
+return`<canvas id="cv" class="cv" width="360" height="480"></canvas><div class="ctl"><button class="btn l" onpointerdown="K.l=1" onpointerup="K.l=0" onpointerleave="K.l=0" onpointercancel="K.l=0">◀</button><button class="btn g" onpointerdown="K.f=1" onpointerup="K.f=0" onpointerleave="K.f=0" onpointercancel="K.f=0">💥</button><button class="btn l" onpointerdown="K.r=1" onpointerup="K.r=0" onpointerleave="K.r=0" onpointercancel="K.r=0">▶</button></div>`},
+kuis:()=>{const q=s.qs[s.qi],a=s.ans,ok=a!==null&&q.o[a]===q.a;
+return`<div class="qh"><span>${hearts(s.lv)}</span><span>Soal ${s.qi+1} dari 5</span><span>🔥 ${s.sk}</span></div><div class="pb"><i style="width:${(s.qi+(a!==null?1:0))/5*100}%"></i></div><div class="tbw"><div id="tb" style="width:${Math.max(0,s.tt/s.tmax*100)}%"></div></div><div class="sm">⏱ ${Math.max(0,Math.ceil(s.tt))} detik · ⚡ jawab di separuh waktu pertama: bonus +5</div>
+${tbar()}<div class="scroll"><span class="tag">📜 Misi ${s.qi+1}</span>${a!==null&&ok?`<span class="pts">+${s.lp}</span>`:""}${qt(q.t)}</div>${s.hint?`<div class="card">💡 Petunjuk: ${IS[s.cur].f}</div>`:""}${q.o.map((v,k)=>`<button class="opt ${s.hid.includes(k)?"hd":a!==null?(v===q.a?"ok":k===a?"no":""):""}" onclick="pick(${k})"><b class="l">${"ABCD"[k]}</b><span>${F(v)}</span>${a!==null?(v===q.a?"✅":k===a?"❌":""):""}</button>`).join("")}
+${say(a===null?"think":ok?"happy":"sad",a===null?"Pilih jawabanmu, Kapten!":ok?"Mantap! Benar, poin bertambah"+(s.sk>1?" dengan bonus beruntun!":"."):((s.to?"⏰ Waktu habis! ":"")+(s.saved?"Salah, tapi pelampung menyelamatkan nyawamu!":"Aduh, salah! Nyawa berkurang satu.")))}
+${a!==null?`<div class="card"><b>Pembahasan:</b> ${q.sol}</div><button class="btn g" onclick="nextQ()">${s.lv===0||s.qi===4?"Lihat hasil ➜":"Soal berikutnya ➜"}</button>`:""}`},
+hasil:()=>{const r=s.res,c=IS[s.cur];return r.win?`<div class="hero"><div class="trophy" style="font-size:72px">🏅</div><h2>Pulau ${c.n} Tuntas!</h2><div class="stars">${[0,1,2].map(k=>`<span class="${k<r.stars?'sp':''}" style="animation-delay:${.6+k*.35}s">${k<r.stars?'⭐':'☆'}</span>`).join('')}</div></div>
+<div class="card">Poin soal: <b>${s.got}</b><br>Bonus bintang: <b>+${r.bonus}</b> (${r.stars} × 20)</div>${say("happy",s.cur<3?"Pulau berikutnya sudah terbuka!":"Semua pulau selesai. Peti harta menantimu!")}
+${s.cur<3?`<button class="btn g" onclick="openIs(${s.cur+1},'map')">Pulau berikutnya ➜</button>`:(s.st.every(x=>x>0)?`<button class="btn g" onclick="champ()">🏆 Buka Peti Harta!</button>`:"")}<button class="btn l" onclick="go('map')">🗺 Peta pulau</button>`
+:`<h2 style="text-align:center">💀 Nyawa habis</h2><div class="stars">☆☆☆</div>${say("sad","Tenang, baca materinya lagi lalu coba ulang!")}<button class="btn g" onclick="openIs(${s.cur},'map')">📖 Baca materi lagi</button><button class="btn l" onclick="sail()">🔁 Ulangi level</button><button class="btn l" onclick="go('map')">🗺 Peta pulau</button>`}};
+function chest(){if(!s.st.every(x=>x>0)){sfx("bad");return}champ()}
+function champ(){s.chest=1;s.pf=1;s.sc='juara';sfx('win');setTimeout(()=>sfx('star'),800);render()}
+function again(){s.score=0;s.un=1;s.st=[0,0,0,0];s.chest=0;go('map')}
+let CF=0;
+function party(big){const id=++CF;let cv=document.getElementById('cf');if(!cv){cv=document.createElement('canvas');cv.id='cf';document.body.appendChild(cv)}cv.width=innerWidth;cv.height=innerHeight;const c=cv.getContext('2d'),ps=[],col=['#f5b82e','#ff5a5f','#2ec4b6','#fff','#7ad7f0','#c77dff'];let t0=performance.now(),last=t0;
+const burst=(X,Y)=>{const h=R(0,360);for(let k=0;k<40;k++){const a=k/40*6.283,v=R(80,220);ps.push({x:X,y:Y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1.2,m:1.2,c:'hsl('+h+',100%,60%)',r:3,g:200})}};
+for(let k=0;k<(big?140:80);k++)ps.push({x:R(0,innerWidth),y:R(-innerHeight,0),vx:R(-30,30),vy:R(120,260),l:99,m:99,c:col[R(0,5)],r:R(4,8),g:0,w:1,a:Math.random()*6});
+const f=now=>{if(id!==CF||(s.sc!=='juara'&&s.sc!=='hasil')){if(id===CF)cv.remove();return}const dt=Math.min(.05,(now-last)/1000);last=now;const el=(now-t0)/1000;c.clearRect(0,0,cv.width,cv.height);
+if(big&&el<9&&Math.random()<dt*1.6)burst(R(60,innerWidth-60),R(60,innerHeight*.5));
+ps.forEach(p=>{p.vy+=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.w){p.a+=dt*8;if(p.y>innerHeight){if(el<6){p.y=-10;p.x=R(0,innerWidth)}else p.l=0}c.save();c.translate(p.x,p.y);c.rotate(p.a);c.fillStyle=p.c;c.fillRect(-p.r,-p.r/2,p.r*2,p.r);c.restore()}else{p.l-=dt;c.globalAlpha=Math.max(0,p.l/p.m);c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r,0,7);c.fill();c.globalAlpha=1}});
+for(let i=ps.length-1;i>=0;i--)if(ps[i].l<=0)ps.splice(i,1);
+if(ps.length||el<9)requestAnimationFrame(f);else cv.remove()};requestAnimationFrame(f)}
+const CJ={D:{r:-31,c:[-19,-15,-12]},G:{r:-26,c:[-14,-10,-7]},A:{r:-24,c:[-12,-8,-5]},Bm:{r:-22,c:[-10,-7,-3]}},PJ=['D','G','A','A','Bm','G','A','D'];
+const HJ=[[[0,5,1],[1,9,1],[2,12,2]],[[0,14,1],[1,12,1],[2,10,2]],[[0,12,1],[1,16,1],[2,19,2]],[[0,21,3],[3,19,1]],[[0,14,2],[2,17,2]],[[0,19,2],[2,17,1],[3,14,1]],[[0,16,1],[1,19,1],[2,21,2]],[[0,17,4]]];
+TH.champ={d:1.846,f(t,i){const b=i%8,h=CJ[PJ[b]],B=.4615;
+h.c.forEach(n=>tone(hz(n),t,1.9,'triangle',MG,.3));tone(hz(h.r),t,.9,'sawtooth',MG,.22);tone(hz(h.r),t,1.8,'sine',MG,1);
+HJ[b].forEach(([k,n,dd])=>{tone(hz(n),t+k*B,dd*B,'sawtooth',MG,.3);tone(hz(n),t+k*B,dd*B,'triangle',MG,.6);tone(hz(n-12),t+k*B,dd*B,'sine',MG,.4)});
+for(let j=0;j<8;j++)tone(hz(h.c[j%3]+24),t+j*B/2,.3,'sine',MG,.3);
+kick(t);kick(t+2*B);if(b===7)for(let j=0;j<4;j++){kick(t+(3+j*.25)*B);noise(t+(3+j*.25)*B,.08,.2,1800)}else[1,3].forEach(q=>noise(t+q*B,.12,.2,1800));if(b===0)noise(t,1.5,.2,3000)}};
+render();
+</script></body></html>
